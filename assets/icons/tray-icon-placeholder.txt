@@ -1,0 +1,6 @@
+# Placeholder for tray icon
+
+Create a 16x16 or 22x22 PNG image named 'tray-icon.png' here.
+The icon should be a cute minion face that looks good at small sizes.
+
+For now, the app will use a generated yellow circle as a fallback.

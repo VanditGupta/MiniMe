@@ -1,0 +1,19 @@
+appId: com.minime.minion
+productName: Mini-Me Minion
+directories:
+  buildResources: build
+files:
+  - dist/**/*
+  - dist-electron/**/*
+  - assets/**/*
+mac:
+  category: public.app-category.entertainment
+  target:
+    - dmg
+    - zip
+  icon: assets/icon.icns
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+
