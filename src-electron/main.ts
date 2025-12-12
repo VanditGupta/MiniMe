@@ -225,57 +225,94 @@ function scheduleNextCheckIn(): void {
 }
 
 /**
+ * Create a programmatic tray icon (minion face)
+ */
+function createTrayIconBuffer() {
+  const size = 22; // 22x22 for retina displays
+  const buffer = Buffer.alloc(size * size * 4);
+  
+  // Yellow color (minion color) - RGB(255, 220, 0)
+  const yellowR = 255;
+  const yellowG = 220;
+  const yellowB = 0;
+  
+  // Black for eyes
+  const blackR = 0;
+  const blackG = 0;
+  const blackB = 0;
+  
+  const centerX = size / 2;
+  const centerY = size / 2;
+  const radius = size / 2 - 1;
+  
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const idx = (y * size + x) * 4;
+      const dx = x - centerX;
+      const dy = y - centerY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      
+      // Check if we're in the eye areas (two small circles)
+      const leftEyeX = centerX - 4;
+      const rightEyeX = centerX + 4;
+      const eyeY = centerY - 2;
+      const eyeRadius = 2.5;
+      
+      const leftEyeDist = Math.sqrt((x - leftEyeX) ** 2 + (y - eyeY) ** 2);
+      const rightEyeDist = Math.sqrt((x - rightEyeX) ** 2 + (y - eyeY) ** 2);
+      
+      if (dist <= radius) {
+        // Inside the main circle
+        if (leftEyeDist <= eyeRadius || rightEyeDist <= eyeRadius) {
+          // Draw eyes (black)
+          buffer[idx] = blackR;
+          buffer[idx + 1] = blackG;
+          buffer[idx + 2] = blackB;
+          buffer[idx + 3] = 255; // Alpha
+        } else {
+          // Draw yellow body
+          buffer[idx] = yellowR;
+          buffer[idx + 1] = yellowG;
+          buffer[idx + 2] = yellowB;
+          buffer[idx + 3] = 255; // Alpha
+        }
+      } else {
+        // Transparent background
+        buffer[idx] = 0;
+        buffer[idx + 1] = 0;
+        buffer[idx + 2] = 0;
+        buffer[idx + 3] = 0; // Transparent
+      }
+    }
+  }
+  
+  return nativeImage.createFromBuffer(buffer, { width: size, height: size });
+}
+
+/**
  * Create the menu bar tray icon
  */
 function createTray(): void {
-  // Use panda.svg as the tray icon
+  // Try to load icon from file first
   const iconPath = isDev 
-    ? join(process.cwd(), 'assets/icons/panda.svg')
-    : join(__dirname, '../assets/icons/panda.svg');
+    ? join(process.cwd(), 'assets/icons/tray-icon.png')
+    : join(__dirname, '../assets/icons/tray-icon.png');
   
-  // Try to load icon, fallback to empty image if not found
-  let trayIcon = nativeImage.createEmpty();
+  let trayIcon;
+  
   try {
-    trayIcon = nativeImage.createFromPath(iconPath);
-    // Resize to appropriate tray size (22x22 for retina, 16x16 for standard)
-    if (!trayIcon.isEmpty()) {
-      trayIcon = trayIcon.resize({ width: 22, height: 22 });
+    const fileIcon = nativeImage.createFromPath(iconPath);
+    if (!fileIcon.isEmpty()) {
+      // Resize to appropriate tray size
+      trayIcon = fileIcon.resize({ width: 22, height: 22 });
     } else {
-      // Create a simple yellow circle as fallback (minion color)
-      const size = 22;
-      const canvas = Buffer.alloc(size * size * 4);
-      for (let i = 0; i < size * size; i++) {
-        const idx = i * 4;
-        const x = (i % size) - size / 2;
-        const y = Math.floor(i / size) - size / 2;
-        const dist = Math.sqrt(x * x + y * y);
-        if (dist < size / 2) {
-          canvas[idx] = 255;     // R
-          canvas[idx + 1] = 220; // G
-          canvas[idx + 2] = 0;   // B
-          canvas[idx + 3] = 255;  // A
-        }
-      }
-      trayIcon = nativeImage.createFromBuffer(canvas, { width: size, height: size });
+      // Use programmatic icon
+      trayIcon = createTrayIconBuffer();
     }
   } catch (error) {
-    console.warn('Could not load tray icon, using fallback');
-    // Create fallback icon
-    const size = 22;
-    const canvas = Buffer.alloc(size * size * 4);
-    for (let i = 0; i < size * size; i++) {
-      const idx = i * 4;
-      const x = (i % size) - size / 2;
-      const y = Math.floor(i / size) - size / 2;
-      const dist = Math.sqrt(x * x + y * y);
-      if (dist < size / 2) {
-        canvas[idx] = 255;     // R
-        canvas[idx + 1] = 220; // G
-        canvas[idx + 2] = 0;   // B
-        canvas[idx + 3] = 255;  // A
-      }
-    }
-    trayIcon = nativeImage.createFromBuffer(canvas, { width: size, height: size });
+    // Use programmatic icon as fallback
+    console.log('Using programmatic tray icon');
+    trayIcon = createTrayIconBuffer();
   }
 
   tray = new Tray(trayIcon);
