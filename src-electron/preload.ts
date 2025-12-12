@@ -44,6 +44,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   removeAllListeners: (channel: string) => {
     ipcRenderer.removeAllListeners(channel);
   },
+  
+  // Send messages to main process
+  send: (channel: string, ...args: any[]) => {
+    ipcRenderer.send(channel, ...args);
+  },
 });
 
 // Type declaration for TypeScript
@@ -59,6 +64,7 @@ declare global {
       getAppVersion: () => Promise<string>;
       requestMicrophonePermission: () => Promise<boolean>;
       removeAllListeners: (channel: string) => void;
+      send: (channel: string, ...args: any[]) => void;
     };
   }
 }

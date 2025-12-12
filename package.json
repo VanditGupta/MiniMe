@@ -20,7 +20,9 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "@electron/remote": "^2.1.2",
     "@hookform/resolvers": "^3.10.0",
+    "@picovoice/porcupine-web": "^3.0.3",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-aspect-ratio": "^1.1.7",
@@ -69,8 +71,7 @@
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.9",
-    "zod": "^3.25.76",
-    "@electron/remote": "^2.1.2"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
@@ -80,6 +81,9 @@
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react-swc": "^3.11.0",
     "autoprefixer": "^10.4.21",
+    "concurrently": "^9.1.2",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
     "eslint": "^9.32.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
@@ -87,14 +91,11 @@
     "lovable-tagger": "^1.1.13",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.19.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
     "vite": "^5.4.19",
-    "electron": "^33.2.1",
-    "electron-builder": "^25.1.8",
-    "concurrently": "^9.1.2",
-    "wait-on": "^8.0.1",
-    "tsx": "^4.19.2"
+    "wait-on": "^8.0.1"
   },
   "build": {
     "appId": "com.minime.minion",
@@ -104,11 +105,17 @@
       "target": [
         {
           "target": "dmg",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         },
         {
           "target": "zip",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         }
       ],
       "icon": "assets/icon.icns",

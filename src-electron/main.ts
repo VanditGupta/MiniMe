@@ -408,6 +408,12 @@ function setupIpcHandlers(): void {
     // This is a placeholder for future permission checks
     return true;
   });
+
+  // Handle wake word detection trigger
+  ipcMain.on('wake-word-detected', () => {
+    console.log('🎤 Wake word detected - showing minion');
+    showPopupWindow();
+  });
 }
 
 /**

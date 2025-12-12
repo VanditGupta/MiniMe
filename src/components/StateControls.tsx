@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Moon, Zap, Mic, MessageCircle } from "lucide-react";
 import type { BlobState } from "./TamagotchiBlob";
+import { sounds } from "@/lib/sounds";
 
 interface StateControlsProps {
   currentState: BlobState;
@@ -20,7 +21,10 @@ const StateControls = ({ currentState, onStateChange }: StateControlsProps) => {
       {states.map(({ state, icon: Icon, label }) => (
         <motion.button
           key={state}
-          onClick={() => onStateChange(state)}
+          onClick={() => {
+            sounds.pop(); // Play pop sound on button click
+            onStateChange(state);
+          }}
           className={`flex flex-col items-center gap-1 px-4 py-3 rounded-2xl backdrop-blur-sm transition-all ${
             currentState === state
               ? "bg-primary/30 border-2 border-primary"

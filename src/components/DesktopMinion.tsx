@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import TamagotchiBlob, { type BlobState } from "@/components/TamagotchiBlob";
 import ScreenFlash from "@/components/ScreenFlash";
 import StateControls from "@/components/StateControls";
+import { sounds } from "@/lib/sounds";
+import { useWakeWord } from "@/hooks/use-wake-word";
 
 interface DesktopMinionProps {
   initialMessage?: string;
@@ -16,6 +18,14 @@ const DesktopMinion = ({ initialMessage }: DesktopMinionProps) => {
   const [blobState, setBlobState] = useState<BlobState>("sleeping");
   const [isFlashing, setIsFlashing] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+
+  // Initialize wake word detection
+  const { isListening, error: wakeWordError } = useWakeWord(() => {
+    // When wake word is detected, show the minion
+    handleMinionAppear();
+    setBlobState("waking");
+    setTimeout(() => setBlobState("listening"), 800);
+  });
 
   // Handle Electron IPC messages
   useEffect(() => {
@@ -32,8 +42,8 @@ const DesktopMinion = ({ initialMessage }: DesktopMinionProps) => {
 
       // Cleanup on unmount
       return () => {
-        window.electronAPI.removeAllListeners('minion-appear');
-        window.electronAPI.removeAllListeners('minion-hide');
+        window.electronAPI?.removeAllListeners('minion-appear');
+        window.electronAPI?.removeAllListeners('minion-hide');
       };
     }
   }, []);
@@ -52,6 +62,9 @@ const DesktopMinion = ({ initialMessage }: DesktopMinionProps) => {
     setIsVisible(true);
     setIsFlashing(true);
     setBlobState("sleeping");
+    
+    // Play jingle when appearing
+    sounds.jingle();
     
     setTimeout(() => setIsFlashing(false), 300);
   };
@@ -76,7 +89,17 @@ const DesktopMinion = ({ initialMessage }: DesktopMinionProps) => {
     if (newState === "waking" && blobState === "sleeping") {
       setIsFlashing(true);
       setTimeout(() => setIsFlashing(false), 300);
+      sounds.wakeUp(); // Play wake-up sound
+    } else if (newState === "sleeping") {
+      sounds.sleep(); // Play sleep sound
+    } else if (newState === "listening") {
+      sounds.listening(); // Play listening sound
+    } else if (newState === "speaking") {
+      sounds.speaking(); // Play speaking sound
+    } else {
+      sounds.randomChime(); // Random chime variation for other state changes
     }
+    
     setBlobState(newState);
     
     // Send state change to main process
@@ -90,6 +113,7 @@ const DesktopMinion = ({ initialMessage }: DesktopMinionProps) => {
     if (blobState === "waking") {
       const timer = setTimeout(() => {
         setBlobState("listening");
+        sounds.listening(); // Play listening sound when transitioning
       }, 800);
       return () => clearTimeout(timer);
     }
