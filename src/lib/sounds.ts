@@ -223,6 +223,45 @@ class SoundManager {
   }
 
   /**
+   * Play a loud wake word confirmation sound
+   * Alert sound when "Hey Minime" is detected
+   */
+  playWakeWordConfirm(): void {
+    this.playSound('wake-confirm.mp3', () => {
+      // Fallback: loud, attention-grabbing chime
+      const ctx = this.getAudioContext();
+      
+      // Play a bright, ascending chime sequence
+      const notes = [
+        { freq: 659.25, time: 0 },    // E5
+        { freq: 783.99, time: 0.1 },  // G5
+        { freq: 987.77, time: 0.2 },   // B5
+        { freq: 1318.51, time: 0.3 }, // E6
+      ];
+
+      notes.forEach((note) => {
+        const oscillator = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(ctx.destination);
+
+        oscillator.type = 'sine';
+        oscillator.frequency.value = note.freq;
+
+        const now = ctx.currentTime + note.time;
+        // Loud (80% of master volume) and clear
+        gainNode.gain.setValueAtTime(0, now);
+        gainNode.gain.linearRampToValueAtTime(this.masterVolume * 0.8, now + 0.01);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+
+        oscillator.start(now);
+        oscillator.stop(now + 0.3);
+      });
+    });
+  }
+
+  /**
    * Play a soft pop (button clicks, small interactions)
    */
   playPop(): void {
@@ -368,6 +407,7 @@ export const sounds = {
   pop: () => getSoundManager().playPop(),
   giggle: () => getSoundManager().playGiggle(),
   wakeUp: () => getSoundManager().playWakeUp(),
+  wakeWordConfirm: () => getSoundManager().playWakeWordConfirm(),
   sleep: () => getSoundManager().playSleep(),
   listening: () => getSoundManager().playListening(),
   speaking: () => getSoundManager().playSpeaking(),

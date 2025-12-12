@@ -21,9 +21,13 @@ const DesktopMinion = ({ initialMessage }: DesktopMinionProps) => {
 
   // Initialize wake word detection
   const { isListening, error: wakeWordError } = useWakeWord(() => {
-    // When wake word is detected, show the minion
-    handleMinionAppear();
+    // When wake word is detected, show the minion with subtle confirmation
+    setIsVisible(true);
+    setIsFlashing(true);
     setBlobState("waking");
+    // Play very subtle wake word confirmation (like "Hey Siri")
+    sounds.wakeWordConfirm(); // Very quiet, short sound
+    setTimeout(() => setIsFlashing(false), 300);
     setTimeout(() => setBlobState("listening"), 800);
   });
 

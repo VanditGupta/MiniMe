@@ -1,5 +1,5 @@
 /**
- * React hook for wake word detection
+ * React hook for wake word detection using Web Speech API
  * Automatically starts listening when component mounts
  */
 
@@ -13,22 +13,22 @@ export function useWakeWord(onWakeWord: () => void) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Only initialize in Electron
-    if (typeof window === 'undefined' || !window.electronAPI) {
+    // Only initialize in Electron/browser
+    if (typeof window === 'undefined') {
       return;
     }
 
-    // Get Picovoice access key from environment or use placeholder
-    // User should set this in their .env file or config
-    const accessKey = import.meta.env.VITE_PICOVOICE_ACCESS_KEY || '';
+    // Check if Web Speech API is available
+    const SpeechRecognition = (window as any).SpeechRecognition || 
+                             (window as any).webkitSpeechRecognition;
     
-    if (!accessKey) {
-      setError('Picovoice Access Key not found. Please set VITE_PICOVOICE_ACCESS_KEY in your .env file.');
-      console.warn('⚠️ Picovoice Access Key not configured. Wake word detection will not work.');
+    if (!SpeechRecognition) {
+      setError('Web Speech API not supported in this browser. Please use Chrome, Edge, or Safari.');
+      console.warn('⚠️ Web Speech API not available');
       return;
     }
 
-    const detector = new WakeWordDetector(accessKey);
+    const detector = new WakeWordDetector();
     detectorRef.current = detector;
 
     // Initialize and start listening
@@ -51,12 +51,12 @@ export function useWakeWord(onWakeWord: () => void) {
           setIsListening(started);
           
           if (started) {
-            console.log('✅ Wake word detection active - say "Hey Minion"');
+            console.log('✅ Wake word detection active - say "Hey Minime"');
           } else {
-            setError('Failed to start listening');
+            setError('Failed to start listening. Please grant microphone permission.');
           }
         } else {
-          setError('Failed to initialize Porcupine');
+          setError('Failed to initialize speech recognition');
         }
       } catch (err) {
         console.error('Wake word initialization error:', err);
@@ -95,4 +95,3 @@ export function useWakeWord(onWakeWord: () => void) {
     },
   };
 }
-

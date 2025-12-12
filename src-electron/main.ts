@@ -68,6 +68,8 @@ function createPopupWindow(): BrowserWindow {
       nodeIntegration: false,
       contextIsolation: true,
       sandbox: false,
+      // Enable Web Speech API
+      enableBlinkFeatures: 'SpeechRecognition',
     },
     show: false, // Don't show until ready
   });
@@ -405,7 +407,7 @@ function setupIpcHandlers(): void {
   // Request microphone permission
   ipcMain.handle('request-microphone-permission', async () => {
     // On macOS, permissions are handled automatically
-    // This is a placeholder for future permission checks
+    // Electron will prompt for microphone access when needed
     return true;
   });
 
