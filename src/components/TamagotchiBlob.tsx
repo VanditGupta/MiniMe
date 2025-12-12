@@ -14,9 +14,9 @@ const TamagotchiBlob = ({ state }: TamagotchiBlobProps) => {
 
   return (
     <div className="relative">
-      {/* Main blob body */}
+      {/* Main blob body - smaller */}
       <motion.div
-        className="relative w-48 h-72 bg-primary rounded-full glow-yellow"
+        className="relative w-32 h-48 bg-primary rounded-full glow-yellow"
         animate={{
           scale: isSleeping ? [1, 1.03, 1] : isWaking ? [1, 1.15, 1] : 1,
           y: isWaking ? [0, -40, 0] : 0,
@@ -44,13 +44,13 @@ const TamagotchiBlob = ({ state }: TamagotchiBlobProps) => {
         }}
       >
         {/* Body shine */}
-        <div className="absolute top-8 left-6 w-8 h-16 bg-accent/40 rounded-full blur-sm transform -rotate-12" />
+        <div className="absolute top-5 left-4 w-5 h-10 bg-accent/40 rounded-full blur-sm transform -rotate-12" />
         
         {/* Eyes container */}
-        <div className="absolute top-14 left-1/2 -translate-x-1/2 flex gap-4">
+        <div className="absolute top-9 left-1/2 -translate-x-1/2 flex gap-2.5">
           {/* Left eye */}
           <motion.div
-            className="relative w-10 h-10 bg-eye-pupil rounded-full overflow-hidden shadow-lg"
+            className="relative w-7 h-7 bg-eye-pupil rounded-full overflow-hidden shadow-lg"
             animate={{
               scaleY: isSleeping ? 0.15 : 1,
               scale: isWaking ? [0.5, 1.3, 1] : 1,
@@ -62,7 +62,7 @@ const TamagotchiBlob = ({ state }: TamagotchiBlobProps) => {
           >
             {/* Big sparkle */}
             <motion.div
-              className="absolute w-4 h-4 bg-eye-white rounded-full"
+              className="absolute w-3 h-3 bg-eye-white rounded-full"
               animate={{
                 x: isListening ? [-1, 1, -1] : isSpeaking ? [0, 2, -2, 0] : 0,
                 scale: [1, 1.1, 1],
@@ -75,7 +75,7 @@ const TamagotchiBlob = ({ state }: TamagotchiBlobProps) => {
             />
             {/* Small sparkle */}
             <motion.div
-              className="absolute w-2 h-2 bg-eye-white rounded-full opacity-80"
+              className="absolute w-1.5 h-1.5 bg-eye-white rounded-full opacity-80"
               animate={{
                 scale: [1, 1.2, 1],
               }}
@@ -88,7 +88,7 @@ const TamagotchiBlob = ({ state }: TamagotchiBlobProps) => {
 
           {/* Right eye */}
           <motion.div
-            className="relative w-10 h-10 bg-eye-pupil rounded-full overflow-hidden shadow-lg"
+            className="relative w-7 h-7 bg-eye-pupil rounded-full overflow-hidden shadow-lg"
             animate={{
               scaleY: isSleeping ? 0.15 : 1,
               scale: isWaking ? [0.5, 1.3, 1] : 1,
@@ -100,7 +100,7 @@ const TamagotchiBlob = ({ state }: TamagotchiBlobProps) => {
           >
             {/* Big sparkle */}
             <motion.div
-              className="absolute w-4 h-4 bg-eye-white rounded-full"
+              className="absolute w-3 h-3 bg-eye-white rounded-full"
               animate={{
                 x: isListening ? [-1, 1, -1] : isSpeaking ? [0, 2, -2, 0] : 0,
                 scale: [1, 1.1, 1],
@@ -113,7 +113,7 @@ const TamagotchiBlob = ({ state }: TamagotchiBlobProps) => {
             />
             {/* Small sparkle */}
             <motion.div
-              className="absolute w-2 h-2 bg-eye-white rounded-full opacity-80"
+              className="absolute w-1.5 h-1.5 bg-eye-white rounded-full opacity-80"
               animate={{
                 scale: [1, 1.2, 1],
               }}
@@ -126,14 +126,14 @@ const TamagotchiBlob = ({ state }: TamagotchiBlobProps) => {
         </div>
 
         {/* Rosy cheeks */}
-        <div className="absolute top-24 left-1/2 -translate-x-1/2 flex gap-16">
-          <div className="w-6 h-4 bg-pink-400/40 rounded-full blur-sm" />
-          <div className="w-6 h-4 bg-pink-400/40 rounded-full blur-sm" />
+        <div className="absolute top-16 left-1/2 -translate-x-1/2 flex gap-10">
+          <div className="w-4 h-3 bg-pink-400/40 rounded-full blur-sm" />
+          <div className="w-4 h-3 bg-pink-400/40 rounded-full blur-sm" />
         </div>
 
         {/* Mouth */}
         <motion.div
-          className="absolute bottom-20 left-1/2 -translate-x-1/2 bg-eye-pupil rounded-full"
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-eye-pupil rounded-full"
           animate={{
             width: isSleeping ? 16 : isListening ? 24 : isSpeaking ? 28 : 20,
             height: isSleeping ? 8 : isListening ? 20 : isSpeaking ? 24 : 12,
@@ -151,7 +151,7 @@ const TamagotchiBlob = ({ state }: TamagotchiBlobProps) => {
         {/* Sound waves when listening */}
         <AnimatePresence>
           {isListening && (
-            <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-1 items-end">
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-1 items-end">
               {[0, 1, 2, 3, 4].map((i) => (
                 <motion.div
                   key={i}
@@ -206,14 +206,14 @@ const TamagotchiBlob = ({ state }: TamagotchiBlobProps) => {
 
       {/* Little arms */}
       <motion.div
-        className="absolute top-1/2 -left-6 w-8 h-4 bg-primary rounded-full"
+        className="absolute top-1/2 -left-4 w-5 h-3 bg-primary rounded-full"
         animate={{
           rotate: isSpeaking ? [-10, 10, -10] : isSleeping ? [0, 5, 0] : 0,
         }}
         transition={{ duration: isSpeaking ? 0.2 : 2, repeat: Infinity }}
       />
       <motion.div
-        className="absolute top-1/2 -right-6 w-8 h-4 bg-primary rounded-full"
+        className="absolute top-1/2 -right-4 w-5 h-3 bg-primary rounded-full"
         animate={{
           rotate: isSpeaking ? [10, -10, 10] : isSleeping ? [0, -5, 0] : 0,
         }}
@@ -221,16 +221,16 @@ const TamagotchiBlob = ({ state }: TamagotchiBlobProps) => {
       />
 
       {/* Little feet */}
-      <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 flex gap-8">
+      <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 flex gap-5">
         <motion.div
-          className="w-8 h-4 bg-primary rounded-full"
+          className="w-5 h-3 bg-primary rounded-full"
           animate={{
             rotate: isSpeaking ? [-5, 5, -5] : 0,
           }}
           transition={{ duration: 0.15, repeat: isSpeaking ? Infinity : 0 }}
         />
         <motion.div
-          className="w-8 h-4 bg-primary rounded-full"
+          className="w-5 h-3 bg-primary rounded-full"
           animate={{
             rotate: isSpeaking ? [5, -5, 5] : 0,
           }}

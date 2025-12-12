@@ -39,9 +39,9 @@ const TIME_BASED_GREETINGS = {
 function createPopupWindow(): BrowserWindow {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
   
-  // Perfect minion size: 280x320px
-  const windowWidth = 280;
-  const windowHeight = 320;
+  // Smaller minion size: 200x240px
+  const windowWidth = 200;
+  const windowHeight = 240;
   
   // Smart positioning: top-right corner with padding
   const x = width - windowWidth - 20;

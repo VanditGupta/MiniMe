@@ -17,7 +17,7 @@ const StateControls = ({ currentState, onStateChange }: StateControlsProps) => {
   ];
 
   return (
-    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
       {states.map(({ state, icon: Icon, label }) => (
         <motion.button
           key={state}
@@ -25,21 +25,21 @@ const StateControls = ({ currentState, onStateChange }: StateControlsProps) => {
             sounds.pop(); // Play pop sound on button click
             onStateChange(state);
           }}
-          className={`flex flex-col items-center gap-1 px-4 py-3 rounded-2xl backdrop-blur-sm transition-all ${
+          className={`flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-lg backdrop-blur-sm transition-all ${
             currentState === state
-              ? "bg-primary/30 border-2 border-primary"
+              ? "bg-primary/30 border border-primary"
               : "bg-muted/50 border border-muted-foreground/20 hover:bg-muted"
           }`}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           <Icon
-            className={`w-5 h-5 ${
+            className={`w-3.5 h-3.5 ${
               currentState === state ? "text-primary" : "text-muted-foreground"
             }`}
           />
           <span
-            className={`text-xs font-medium ${
+            className={`text-[10px] font-medium ${
               currentState === state ? "text-primary" : "text-muted-foreground"
             }`}
           >

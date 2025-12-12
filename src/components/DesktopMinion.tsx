@@ -143,7 +143,7 @@ const DesktopMinion = ({ initialMessage }: DesktopMinionProps) => {
 
   return (
     <div 
-      className="relative w-full h-full overflow-hidden rounded-2xl"
+      className="relative w-full h-full overflow-hidden"
       style={{ background: 'transparent' }}
       onClick={(e) => {
         // Click outside to dismiss (but not on the minion itself)
@@ -154,9 +154,9 @@ const DesktopMinion = ({ initialMessage }: DesktopMinionProps) => {
     >
       <ScreenFlash isFlashing={isFlashing} />
 
-      {/* Ambient glow behind blob */}
+      {/* Ambient glow behind blob - smaller */}
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full opacity-20 blur-3xl pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full opacity-20 blur-2xl pointer-events-none"
         style={{ background: "hsl(var(--primary))" }}
         animate={{
           scale: blobState === "speaking" ? [1, 1.2, 1] : [1, 1.1, 1],
